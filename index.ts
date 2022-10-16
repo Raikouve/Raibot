@@ -1,4 +1,4 @@
-import { Client, GatewayIntentBits, EmbedBuilder } from 'discord.js';
+import { Client, GatewayIntentBits, EmbedBuilder, Message } from 'discord.js';
 import dotenv from 'dotenv';
 
 import { botReply } from './src/handlers/botReply';
@@ -19,7 +19,7 @@ client.on('ready', () => {
 });
 
 
-client.on('messageCreate', (message: any) => {
+client.on('messageCreate', (message) => {
   
   // console.log(message);
 

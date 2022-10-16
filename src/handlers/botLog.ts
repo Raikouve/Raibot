@@ -1,30 +1,35 @@
+import { Message, Client, EmbedBuilder } from "discord.js";
+
 export function botLog(
-  message: {
-    author: { id: string; username: string };
-    channel: string;
-    reply: Function;
-    content: string;
-    attachments: { url: string; contentType: string, toJSON: Function };
-    createdAt: { getHours: Function; getMinutes: Function };
-  },
-  client: any
+  message: Message,
+  client: Client
 ): void {
-  let logMessage = "";
   if (message.author.id !== "860418636069732382") {
     const botLog: any = client.channels.cache.get("1031182228312555530");
-    if (message.attachments.toJSON().every((value: { contentType: string }) => value.contentType === 'image/png' || value.contentType === 'image/jpg')) {
-      logMessage = `Mensagem enviada em ${message.channel} por ${
-        message.author.username
-      } às ${message.createdAt.getHours()}h${message.createdAt.getMinutes()}: ${
-        message.attachments.toJSON()[0].url
-      }`;
+    if (message.attachments.toJSON().length > 0 && message.attachments.toJSON().every((value) => value.contentType === 'image/png' || value.contentType === 'image/jpg')) {
+      const date = new Date();
+
+      const logMessage = new EmbedBuilder()
+        .setColor('#308CF4')
+        .setTitle(`${message.guild}`)
+        .setThumbnail(`${message.author.avatarURL({ extension: "png" })}`)
+        .addFields(
+          { name: `${message.author.username} enviou:`, value: `${message.attachments.toJSON()[0].url}` },
+        )
+        .setTimestamp(date.valueOf())
+        botLog.send({embeds: [logMessage]});
     } else {
-      logMessage = `Mensagem enviada em ${message.channel} por ${
-        message.author.username
-      } às ${message.createdAt.getHours()}h${message.createdAt.getMinutes()}: ${
-        message.content
-      }`;
+      const date = new Date();
+
+      const logMessage = new EmbedBuilder()
+        .setColor('#308CF4')
+        .setTitle(`${message.guild}`)
+        .setThumbnail(`${message.author.avatarURL({ extension: "png" })}`)
+        .addFields(
+          { name: `${message.author.username} enviou:`, value: `${message.content}` },
+        )
+        .setTimestamp(date.valueOf())
+        botLog.send({embeds: [logMessage]});
     }
-    botLog.send({ content: logMessage });
   }
 }
