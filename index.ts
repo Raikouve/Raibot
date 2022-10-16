@@ -2,6 +2,7 @@ import { Client, GatewayIntentBits, EmbedBuilder } from 'discord.js';
 import dotenv from 'dotenv';
 
 import { botReply } from './src/handlers/botReply';
+import { botLog } from './src/handlers/botLog';
 
 dotenv.config()
 
@@ -18,9 +19,11 @@ client.on('ready', () => {
 });
 
 
-client.on('messageCreate', (message) => {
+client.on('messageCreate', (message: any) => {
   
-  console.log(message);
+  // console.log(message);
+
+  botLog(message, client);
 
   if(message.content.includes('http://gamersclub.com.br/j/')) {
 
@@ -37,6 +40,12 @@ client.on('messageCreate', (message) => {
 
       message.channel.send({embeds: [embedGcInvite]});
       message.delete();
+  }
+
+  if(message.content.includes('<@364772043272749057>')) {
+    message.reply({
+      content: 'Raikov é um homem sigma muito ocupado, talvez ele não possa respondê-lo(a) agora.'
+    })
   }
 
   botReply(message, 'Preguiçoso', 'cs', 'https://tenor.com/view/no-donkeys-shrek-gif-16041065');
